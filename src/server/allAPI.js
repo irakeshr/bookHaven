@@ -1,0 +1,17 @@
+import { CommonApi } from "./CommonAPI";
+import SERVER_URL from "./serverURL";
+
+export const userLogin= async(reqBody)=>{
+  return await CommonApi("POST", `${SERVER_URL}/login`, reqBody);
+}
+
+export const userRegister = async (reqBody) => {
+  return await CommonApi("POST", `${SERVER_URL}/register`, reqBody);
+};
+export const userGoogleLogin = async (reqBody) => {
+  return await CommonApi("POST", `${SERVER_URL}/googleLogin`, reqBody);
+};
+
+export const getUser= async()=>{
+    return CommonApi("GET",`${SERVER_URL}/me`)
+}
