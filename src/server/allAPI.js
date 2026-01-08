@@ -15,3 +15,16 @@ export const userGoogleLogin = async (reqBody) => {
 export const getUser= async()=>{
     return CommonApi("GET",`${SERVER_URL}/me`)
 }
+export const postBooks= async(ReqBody)=>{
+    return CommonApi("POST",`${SERVER_URL}/addBook`,ReqBody)
+}
+export const getAllBooks= async()=>{
+    return CommonApi("GET",`${SERVER_URL}/getBook`)
+}
+export const getBookLatest= async()=>{
+    return CommonApi("GET",`${SERVER_URL}/getBookLatest`)
+}
+export const getOneBook= async(id)=>{
+    return CommonApi("GET",`${SERVER_URL}/getOneBook/${id}`)
+}
+ 

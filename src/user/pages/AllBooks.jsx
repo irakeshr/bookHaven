@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getAllBooks } from "../../server/allAPI";
 
 
 const AllBooks = () => {
   const [pageLock,setPageLock]=useState(false)
+  const [allBooks,setAllBooks]=useState([])
   useEffect(()=>{
     const token= localStorage.getItem("Token")
     if (token){
@@ -11,6 +13,24 @@ const AllBooks = () => {
     }
   console.log(token)
   },[])
+
+    useEffect(()=>{
+  const getBooks=async()=>{
+   try {
+          const res = await getAllBooks();
+         
+          
+           if (res.data && res.data.books) {
+              setAllBooks(res.data.books);
+          }
+          
+          } catch (err) {
+          console.log(err);
+        }
+    }
+  
+    getBooks();
+    },[])
 
   return (
     <div className="bg-[#1A1A1A] font-['Work_Sans',_sans-serif] text-[#F5F5F5]">
@@ -70,28 +90,27 @@ const AllBooks = () => {
                 pageLock ?
                  (<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 {/* Note: In a real app, this grid of cards would be a .map() loop */}
-
-                <Link
-                to={"/view-books/1"}>
+{allBooks && allBooks.map((books,index)=>{
+  return(
+    <Link key={index}
+                to={`/view-books/${books._id}`}>
                 <div className="flex flex-col rounded-[0.75rem] bg-[#242424] p-4 group">
                   <div
                     className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-[0.5rem] mb-4"
                     data-alt="Book cover of To Kill a Mockingbird"
                     style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuCD_Mx1C5YQbVIvEgQ3Lrl3GBfu-psWRIVGcZFl94Xr7z_BvqgcSMNZMw8OKGdn8nIgPvzPGpJTt6nTACRyG3rFdHeVh13tQbceyoASm--YV7a4-djTao2dECXqvTDJEChuRbXRgSPs76fpiOxaQcgvK2hHZAWorlRC1iUWiUNWl6e4n4-8tY0d7axywx6A4ABy7UaxZ2BzdFUzeiPpL9pu-lT2oEfMrWjxOUm90MgTAKt4WHOblU9VMzHGUThR89A4wJUVJDoo47I")',
-                    }}
+                      backgroundImage:`url(${books.imageUrl})`}}
                   ></div>
                   <div className="flex flex-col flex-grow">
                     <h3 className="text-[#F5F5F5] text-base font-medium leading-normal">
-                      To Kill a Mockingbird
+                      {books.title}
                     </h3>
                     <p className="text-[#888888] text-sm font-normal leading-normal">
-                      Harper Lee
+                      {books.author}
                     </p>
                     <div className="flex-grow mt-2"></div>
                     <div className="flex items-center justify-between mt-4">
-                      <p className="text-lg font-bold text-[#D4A056]">$12.99</p>
+                      <p className="text-lg font-bold text-[#D4A056]">${books.price}</p>
                       <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-[0.5rem] h-9 px-4 bg-[#D4A056] text-[#1A1A1A] text-sm font-bold leading-normal tracking-[0.015em] opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="truncate">Buy Now</span>
                       </button>
@@ -99,36 +118,12 @@ const AllBooks = () => {
                   </div>
                 </div>
                 </Link>
+  )
+}) }
+                
                 
 
-                {/* Other book cards would follow the same pattern */}
-                <Link to={"/view-books/2"}>
-                <div className="flex flex-col rounded-[0.75rem] bg-[#242424] p-4 group">
-                  <div
-                    className="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-[0.5rem] mb-4"
-                    data-alt="Book cover of 1984"
-                    style={{
-                      backgroundImage:
-                        'url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6zzP-7oJhkZ2KLdDEM23RdyaLndGRTVOkiQERmfdGpM0SBa_A7T21woj74OL0Ghtd33ZWOhP6XtNmj87qOphFvDqfWJ05cid1jnmfIQ6S5kDiiOa2-7jtlqsBrNZLPstaDGtk1FtAnkXbasy3IXzK_sTjK45vbTfoSP9vvtosKaY11yjag3sSuLno02L9BTLTfsKrvJuqQA4Uzm-EsnOWL00pEFatGWd6LNruCdG91vw51vCzr51-Y7aK7ajtrsWIJj4eFIX03aU")',
-                    }}
-                  ></div>
-                  <div className="flex flex-col flex-grow">
-                    <h3 className="text-[#F5F5F5] text-base font-medium leading-normal">
-                      1984
-                    </h3>
-                    <p className="text-[#888888] text-sm font-normal leading-normal">
-                      George Orwell
-                    </p>
-                    <div className="flex-grow mt-2"></div>
-                    <div className="flex items-center justify-between mt-4">
-                      <p className="text-lg font-bold text-[#D4A056]">$9.50</p>
-                      <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-[0.5rem] h-9 px-4 bg-[#D4A056] text-[#1A1A1A] text-sm font-bold leading-normal tracking-[0.015em] opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="truncate">Buy Now</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                </Link>
+                
 
                 
               </div>):<div className="flex flex-col items-center justify-center mt-20">

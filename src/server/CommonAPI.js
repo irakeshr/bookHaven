@@ -6,7 +6,7 @@ export const CommonApi = async (httpMethod, url, ReqBody) => {
     const Token = localStorage.getItem("Token");
 
     const headers = {
-        "Content-Type":"application/json",
+        
         Authorization:Token ? `Bearer ${Token}`: ""
     }
   const reqConfig = {

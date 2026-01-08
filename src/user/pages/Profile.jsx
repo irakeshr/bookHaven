@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
  import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
 import { useState } from "react";
+import { postBooks } from '../../server/allAPI';
  
  
   
@@ -16,8 +17,10 @@ const [bookDetails, setBookDetails] = useState({
     imageUrl: "",
     category: "",
     price: "",
+    noofpages:"",
     discountPrice: "",
     abstract: "",
+    uploadedImages:[],
   });
 
   const handleFormChange = (e) => {
@@ -29,28 +32,40 @@ const [bookDetails, setBookDetails] = useState({
   const [openModal, setOpenModal] = useState(false);
   const [images, setImages] = useState([]);
   // Removed unused previewImages state
-
-  // --- FIXED FUNCTION STARTS HERE ---
+ 
   // When user selects using Browse button
   const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to Array
-    
-    if (files.length > 0) {
-      // Create URLs for all selected files
-      const newImages = files.map((file) => URL.createObjectURL(file));
-      
-      // Append new images to the existing list (don't overwrite)
-      setImages((prev) => [...prev, ...newImages]);
+    if(bookDetails.uploadedImages.length<=3){
+       const files = Array.from(e.target.files); // Convert FileList to Array
+ if (files.length > 0) {
+ // Filter out files that would exceed the 3-image limit
+ const filesToAdd = files.slice(0, 3 - bookDetails.uploadedImages.length);
+ 
+
+ setBookDetails((prev) => ({ ...prev, uploadedImages: [...prev.uploadedImages, ...filesToAdd] }));
+
+ // Create URLs for the files that were actually added
+ const newImages = filesToAdd.map((file) => URL.createObjectURL(file));
+
+ // Append new images to the existing list (don't overwrite)
+ setImages((prev) => [...prev, ...newImages]);
+ console.log(bookDetails);
+ }
+    }else{
+      alert("max 3 img")
     }
   };
-  // --- FIXED FUNCTION ENDS HERE ---
+  
+ 
 
   // Drag & Drop
   const handleDrop = async (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
+    setBookDetails((prev) => ({ ...prev, uploadedImages: [...prev.uploadedImages, ...files] }));
     const newImages = files.map((file) => URL.createObjectURL(file));
     setImages((prev) => [...prev, ...newImages]);
+    
   };
 
   const handleDragOver = (e) => e.preventDefault();
@@ -58,7 +73,59 @@ const [bookDetails, setBookDetails] = useState({
   // handle Delete
   const handleDelete = (i) => {
     setImages((prev) => prev.filter((_, index) => index !== i));
+    setBookDetails((prev)=>({...prev,uploadedImages:prev.uploadedImages.filter((_,index)=>{index!==i})}))
   };
+
+  // Api Call 
+  const handleBookAdd=async()=>{
+    try {
+      const{title,
+    author,
+    publisher,
+    language,
+    pages,
+    isbn,
+    imageUrl,
+    category,
+    price,
+    discountPrice,
+    abstract,
+    uploadedImages}=bookDetails;
+
+console.log(bookDetails.uploadedImages)
+    const reqBody= new FormData();
+     
+ 
+    for (let key in bookDetails) {
+      if (key !== "uploadedImages") { // Exclude uploadedImages from direct append
+        reqBody.append(key, bookDetails[key]);
+      } else {
+        // Append each file in uploadedImages array
+        bookDetails.uploadedImages.forEach((item) => {reqBody.append("uploadedImages", item)
+          console.log(item)
+        });
+
+      }
+    }
+    for (let [key, value] of reqBody.entries()) {
+  console.log(key, value);
+}
+
+console.log(reqBody)
+    const res = await postBooks(reqBody);
+ if(res.status===201){
+ alert("Book added successfully")
+ setOpenModal(false)
+ }else{
+  alert(res.response.data.message)
+ }
+    } catch (error) {
+      console.log("err"+error)
+    }
+  }
+
+
+  // Api call -end
 
   return (
     <div className="bg-[#1A1A1A] font-['Work_Sans',_sans-serif] text-[#F5F5F5]">
@@ -303,7 +370,7 @@ const [bookDetails, setBookDetails] = useState({
                   <label>
                     <input
                       type="file"
-                      multiple
+                      // multiple
                       accept="image/*"
                       className="hidden"
                       id="file-upload"
@@ -321,7 +388,7 @@ const [bookDetails, setBookDetails] = useState({
                 </div>
               )}
 
-              {images.length > 0 && (
+              {images.length > 0 && ( // if image show the image and show the button for upload images
                 <div className="grid grid-cols-3 gap-3 mt-4">
                   {images.map((img, i) => (
                     <div key={i} className="relative group">
@@ -372,8 +439,8 @@ const [bookDetails, setBookDetails] = useState({
             {/* Bottom Buttons (Submit/Clear) */}
             <div className="lg:col-span-2 rounded-[0.75rem] bg-[#242424] p-6 lg:p-8">
               <div className="flex flex-col md:flex-row gap-4">
-                <button className="w-full md:w-auto flex-1 flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-[0.5rem] h-11 px-6 bg-[#D4A056] text-[#1A1A1A] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
-                  <span className="truncate">Submit Listing</span>
+                <button onClick={handleBookAdd} className="w-full md:w-auto flex-1 flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-[0.5rem] h-11 px-6 bg-[#D4A056] text-[#1A1A1A] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
+                  <span className="truncate">Submit</span>
                 </button>
                 <button className="w-full md:w-auto flex-1 flex min-w-[120px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-[0.5rem] h-11 px-6 bg-[#333] text-[#F5F5F5] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#444] transition-colors">
                   <span className="truncate">Clear Form</span>
