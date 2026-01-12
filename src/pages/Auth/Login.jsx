@@ -66,7 +66,7 @@ const Login = () => {
       console.log(res);
       if (res.status === 200) {
         alert("Login Successfull");
-        localStorage.setItem("UserDetails", JSON.stringify(logDetails));
+        localStorage.setItem("UserDetails", JSON.stringify(res.data.user));
         localStorage.setItem("Token", res.data.Token);
         navigate("/");
       }

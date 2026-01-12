@@ -27,4 +27,13 @@ export const getBookLatest= async()=>{
 export const getOneBook= async(id)=>{
     return CommonApi("GET",`${SERVER_URL}/getOneBook/${id}`)
 }
+export const getAllUsers=async()=>{
+  return CommonApi("GET",`${SERVER_URL}/admin/get-all-user`)
+}
+export const getForAdminAllBooks=async()=>{
+  return CommonApi("GET",`${SERVER_URL}/admin/get-all-booksForAdmin`)
+}
+export const getLatestBookForAdmin=async()=>{
+  return CommonApi("GET",`${SERVER_URL}/admin/get-latest-booksForAdmin`)
+}
  
