@@ -37,3 +37,10 @@ export const getLatestBookForAdmin=async()=>{
   return CommonApi("GET",`${SERVER_URL}/admin/get-latest-booksForAdmin`)
 }
  
+export const updateAdminProfile=async(reqBody)=>{
+  return CommonApi("POST",`${SERVER_URL}/admin/update-admin-profile`,reqBody)
+}
+export const getAdminProfile=async()=>{
+  return CommonApi("GET",`${SERVER_URL}/admin/get-admin-data`)
+}
+

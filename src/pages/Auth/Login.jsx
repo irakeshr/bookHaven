@@ -39,6 +39,7 @@ const Login = () => {
           Password: "",
         });
         localStorage.setItem("UserDetails",JSON.stringify(Res.data) )
+        console.log(Res.data.token)
 
         localStorage.setItem("Token", Res.data.Token);
         navigate("/");
@@ -67,8 +68,12 @@ const Login = () => {
       if (res.status === 200) {
         alert("Login Successfull");
         localStorage.setItem("UserDetails", JSON.stringify(res.data.user));
-        localStorage.setItem("Token", res.data.Token);
-        navigate("/");
+        localStorage.setItem("Token", res.data.token);
+        console.log(res.data.user.role)
+       if(res.data.user.role=="admin"){
+        navigate("/admin-home")
+       }
+        else navigate("/");
       }
     } catch (error) {
       console.log(error);

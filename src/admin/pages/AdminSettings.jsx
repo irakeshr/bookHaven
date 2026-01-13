@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-// import { userLogin } from '../../server/allAPI'; // Uncomment if needed
-
+import { getAdminProfile, updateAdminProfile } from '../../server/allAPI';
 const AdminSettings = () => {
     // 1. Get User Details
     const UserInfo = JSON.parse(localStorage.getItem("UserDetails")) || {};
+     console.log(UserInfo);
+     
+     
 
     // 2. Local State for Form Handling
-    const [username, setUsername] = useState(UserInfo.name || "");
-    const [profileImage, setProfileImage] = useState(UserInfo.profile || "https://via.placeholder.com/150");
+    const [username, setUsername] = useState("");
+    const [profileImage, setProfileImage] = useState ("");
     const [selectedFile, setSelectedFile] = useState(null);
     
     // Password States
@@ -22,7 +24,7 @@ const AdminSettings = () => {
         const file = e.target.files[0];
         if (file) {
             setSelectedFile(file);
-            setProfileImage(URL.createObjectURL(file)); // Create local preview
+            setProfileImage(URL.createObjectURL(file));  
         }
     };
 
@@ -33,15 +35,65 @@ const AdminSettings = () => {
     };
 
     // Handle Form Submit
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        console.log("Updating Profile:", {
-            username,
-            selectedFile,
-            passwords
-        });
-        // Call your API here to update the user profile
-    };
+   const handleUpdate = async (e) => {
+  e.preventDefault();
+
+  const fd = new FormData();
+  fd.append("username", username);
+
+  if (selectedFile) {
+    fd.append("selectedFile", selectedFile);
+  }
+
+  if (passwords?.new) {
+    fd.append("passwords", JSON.stringify(passwords));
+  }
+
+  try {
+    const response = await updateAdminProfile(fd);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const url = "http://localhost:3000/";
+ 
+const [adminDetails, setAdminDetails] = useState(null);
+
+useEffect(() => {
+  const getAdminDetails = async () => {
+    try {
+      const respond = await getAdminProfile();
+
+      if (respond.status === 200 && respond.data.user?.length > 0) {
+        const admin = respond.data.user[0]; // ✅ extract object
+
+        setAdminDetails(admin);
+        setUsername(admin.name);
+
+        if (admin.profile && admin.profile !== "undefined") {
+          setProfileImage(
+  `${url}uploads/${encodeURIComponent(admin.profile)}`
+);
+
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching admin details:", error);
+    }
+  };
+
+  getAdminDetails();
+}, []);
+
+ 
+
+         
+    
+useEffect(()=>{
+    console.log(profileImage);
+})
+     
 
     return (
         <div className="flex-1 flex flex-col font-sans">
@@ -63,7 +115,7 @@ const AdminSettings = () => {
                             <img
                                 alt="Admin profile"
                                 className="h-40 w-40 rounded-full object-cover border-4 border-[#D4A056]/20 shadow-xl"
-                                src={profileImage} 
+                                src={profileImage && profileImage} 
                             />
                             {/* Camera Icon Removed - Left side is View Only */}
                         </div>
