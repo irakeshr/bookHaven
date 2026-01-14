@@ -125,7 +125,7 @@ console.log(reqBody)
   }
 
 
-  // Api call -end
+   
 
   return (
     <div className="bg-[#1A1A1A] font-['Work_Sans',_sans-serif] text-[#F5F5F5]">
@@ -135,11 +135,11 @@ console.log(reqBody)
           Sell Your Book
         </ModalHeader>
         <ModalBody className="bg-[#1A1A1A] overflow-auto scrollbar-hide overflow-y-auto">
-          {/* "Sell Your Book" form content starts here */}
+       
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 rounded-[0.75rem] bg-[#242424] p-6 lg:p-8">
               <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Row 1: Title & Publisher */}
+                
                 <div>
                   <label
                     className="text-sm font-medium text-[#F5F5F5] mb-2 block"
@@ -279,13 +279,21 @@ console.log(reqBody)
                     value={bookDetails.category}
                     onChange={handleFormChange}
                   >
-                    <option>Select Category</option>
-                    <option>Fiction</option>
-                    <option>Non-Fiction</option>
-                    <option>Science Fiction</option>
-                    <option>Fantasy</option>
-                    <option>Mystery</option>
-                    <option>Biography</option>
+                    <option>All Genres</option>
+                        <option>Classic Literature</option>
+                        <option>Mystery</option>
+                        <option>Fantasy</option>
+                        <option>History</option>
+                        <option>Romance</option>
+                        <option>Politics</option>
+                        <option>Thriller</option>
+                        <option>Literary Fiction</option>
+                        <option>Self-Help</option>
+                        <option>Auto/Biography</option>
+                        <option>Philosophy</option>
+                        <option>Science Fiction</option>
+                        <option>Biography</option>
+                        <option>Memoir</option>
                   </select>
                 </div>
 
@@ -492,6 +500,7 @@ console.log(reqBody)
                 className="h-32 w-32 rounded-full object-cover ring-2 ring-[#D4A056]"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeUA3gai5F9XP3Lv0IGdj6jROsvh1iiCBr5yW0dwWAZrjfjmFlQuep5Umd6CGZi2Qj-Xe-F5uOhY8jTqZXWoYp-Rv_2u20gbh54zjVe992nQJpPGm_WK2aJ0uzlyOaI_sR0gNClzJnIj1qmkIT02vvnYxjcua9PxS44lofFBFhriATvg7S-jkfF1kxbBwoVnTmetvLhWpdFAR0NELcQoA_Q4CQhP4k9B3jBauCUpBcHgbGPHuNxSqlYUdCfsTZvXmsWSuPJGl5lT8"
               />
+              <input type="text"  className='hidden '/>
               <button className="absolute bottom-1 right-1 bg-[#D4A056] text-[#1A1A1A] p-2 rounded-full hover:bg-opacity-80 transition-colors">
                 <span className="material-symbols-outlined text-base">
                   edit

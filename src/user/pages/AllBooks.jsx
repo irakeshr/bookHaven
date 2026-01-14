@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllBooks } from "../../server/allAPI";
+import { SearchContext } from "../../Context/SearchContext";
 
 
 const AllBooks = () => {
   const [pageLock,setPageLock]=useState(false)
   const [allBooks,setAllBooks]=useState([])
+  const [tempAllBooks,setTempAllBooks]=useState([])
+  const {searchKey,setSearchKey} = useContext(SearchContext);
   useEffect(()=>{
     const token= localStorage.getItem("Token")
     if (token){
@@ -17,11 +20,10 @@ const AllBooks = () => {
     useEffect(()=>{
   const getBooks=async()=>{
    try {
-          const res = await getAllBooks();
-         
-          
+          const res = await getAllBooks(searchKey);
            if (res.data && res.data.books) {
               setAllBooks(res.data.books);
+              setTempAllBooks(res.data.books)
           }
           
           } catch (err) {
@@ -30,7 +32,25 @@ const AllBooks = () => {
     }
   
     getBooks();
-    },[])
+    },[searchKey])
+
+    const handleFilter =(e)=>{
+ if(e.target.value === "All Genres"){
+ setAllBooks(tempAllBooks);
+ }else{
+ setAllBooks(tempAllBooks.filter((item)=>(item.category).toLowerCase().trim()===(e.target.value).toLowerCase().trim()))
+ }
+ console.table(allBooks);
+
+    }
+
+//     const handleSearch=(e)=>{
+//       setSearchKey(e.target.value);
+    
+//  setAllBooks(tempAllBooks.filter((item)=>(item.title).toLowerCase().trim().includes((e.target.value).toLowerCase().trim())))
+
+//     }
+ 
 
   return (
     <div className="bg-[#1A1A1A] font-['Work_Sans',_sans-serif] text-[#F5F5F5]">
@@ -52,20 +72,30 @@ const AllBooks = () => {
                           className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-none text-[#F5F5F5] focus:outline-0 focus:ring-0 border-none bg-[#1A1A1A] h-full placeholder:text-[#888888] px-4 text-base font-normal leading-normal"
                           placeholder="Search for your next adventure..."
                           defaultValue=""
+                          onChange={(e)=>{setSearchKey(e.target.value)}}
                         />
                       </div>
                     </label>
                   </div>
                   <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
                     <div className="relative w-full sm:w-1/2 md:w-48">
-                      <select className="form-select w-full appearance-none bg-[#1A1A1A] border-none text-[#F5F5F5] h-12 rounded-[0.5rem] pl-4 pr-10 focus:ring-[#D4A056] focus:ring-1">
+                      <select onChange={handleFilter} className="form-select w-full appearance-none bg-[#1A1A1A] border-none text-[#F5F5F5] h-12 rounded-[0.5rem] pl-4 pr-10 focus:ring-[#D4A056] focus:ring-1">
                         <option>All Genres</option>
-                        <option>Sci-Fi</option>
                         <option>Classic Literature</option>
                         <option>Mystery</option>
                         <option>Fantasy</option>
                         <option>History</option>
                         <option>Romance</option>
+                        <option>Politics</option>
+                        <option>Thriller</option>
+                        <option>Literary Fiction</option>
+                        <option>Self-Help</option>
+                        <option>Auto/Biography</option>
+                        <option>Philosophy</option>
+                        <option>Science Fiction</option>
+                        <option>Biography</option>
+                        <option>Memoir</option>
+                        {/* add more options */}
                       </select>
                       <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#888888] pointer-events-none">
                         expand_more

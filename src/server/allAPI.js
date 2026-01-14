@@ -18,8 +18,8 @@ export const getUser= async()=>{
 export const postBooks= async(ReqBody)=>{
     return CommonApi("POST",`${SERVER_URL}/addBook`,ReqBody)
 }
-export const getAllBooks= async()=>{
-    return CommonApi("GET",`${SERVER_URL}/getBook`)
+export const getAllBooks= async(searchKey)=>{
+    return CommonApi("GET",`${SERVER_URL}/getBook?search=${searchKey}`)
 }
 export const getBookLatest= async()=>{
     return CommonApi("GET",`${SERVER_URL}/getBookLatest`)
