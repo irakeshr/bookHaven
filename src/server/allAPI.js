@@ -44,3 +44,6 @@ export const getAdminProfile=async()=>{
   return CommonApi("GET",`${SERVER_URL}/admin/get-admin-data`)
 }
 
+export const MakePayment=async(reqBody)=>{
+return CommonApi ("POST",`${SERVER_URL}/user/makePayment`,reqBody)
+}
