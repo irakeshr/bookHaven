@@ -56,7 +56,7 @@ const AdminSettings = () => {
     console.log(error);
   }
 };
-const url = "http://localhost:3000/";
+const url = "https://bookhaven-backend-ljlm.onrender.com";
  
 const [adminDetails, setAdminDetails] = useState(null);
 
