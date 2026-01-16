@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
  
  
@@ -33,12 +33,12 @@ function PaymentSuccess() {
         </p>
         
         <div className="mt-12 hidden"> {/* Hidden for now as there's no order details page */}
-          <a 
+          <Link
             className="inline-block px-12 py-4 bg-[#c7924d] text-white font-medium rounded-lg shadow-sm hover:bg-opacity-90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#c7924d] focus:ring-offset-[#f8f7f2] uppercase tracking-wider text-sm" 
-            href="#"
+            to={""}
           >
             View Order Details
-          </a>
+          </Link>
         </div>
         
         <div className="mt-8">
