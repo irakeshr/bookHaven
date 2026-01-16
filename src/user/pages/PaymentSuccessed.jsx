@@ -2,11 +2,10 @@ import { React, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
  
  
-function PaymentSuccess() {
+function PaymentSuccessed() {
  const [showIcon, setShowIcon] = useState(false);
 
   useEffect(() => {
-    // Trigger animation after a tiny delay
     setShowIcon(true);
   }, []);
 
@@ -54,4 +53,4 @@ function PaymentSuccess() {
   )
 }
 
-export default PaymentSuccess
+export default PaymentSuccessed;
