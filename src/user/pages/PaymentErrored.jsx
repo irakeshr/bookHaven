@@ -1,7 +1,7 @@
 import React from 'react'
  
 import { Link } from 'react-router-dom'
-function PaymentError() {
+function PaymentErrored() {
   return (
        
 <>
@@ -63,4 +63,4 @@ function PaymentError() {
   )
 }
 
-export default PaymentError;
+export default PaymentErrored;

@@ -19,8 +19,8 @@ import Footer from './components/Footer'
 import AdminLayout from './admin/pages/AdminLayout'
 import UserLayout from './user/pages/UserLayout'
 import FrontPage from './pages/FrontPage'
-import PaymentError from './user/pages/PaymentError'
 import PaymentSuccessed from './user/pages/PaymentSuccessed'
+import PaymentErrored from './user/pages/PaymentErrored'
  
 
 function App() {
@@ -49,7 +49,7 @@ function App() {
   <Route path="/contact" element={<Contact />} />
   <Route path="/profile" element={<Profile />} />
   <Route path="/payment-success" element={<PaymentSuccessed/>} />
-  <Route path="/payment-error" element={<PaymentError />} />
+  <Route path="/payment-error" element={<PaymentErrored />} />
   </Route>
   
   {/* Auth Routes*/}
